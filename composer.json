@@ -29,6 +29,7 @@
         }
     ],
     "require": {
+        "ext-openssl": "*",
         "raxos/contract": "*",
         "raxos/error": "*",
         "raxos/foundation": "*"

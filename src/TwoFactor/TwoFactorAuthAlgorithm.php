@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace Raxos\Foundation\Security\TwoFactor;
+namespace Raxos\Security\TwoFactor;
 
 /**
  * Enum TwoFactorAuthAlgorithm
  *
  * @author Bas Milius <bas@mili.us>
- * @package Raxos\Foundation\Security\TwoFactor
- * @since 1.0.17
+ * @package Raxos\Security\TwoFactor
+ * @since 2.0.0
  */
 enum TwoFactorAuthAlgorithm: string
 {

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Raxos\Foundation\Security\TwoFactor;
+namespace Raxos\Security\TwoFactor;
 
 use Random\RandomException;
 use Raxos\Contract\Security\TwoFactorAuthExceptionInterface;
@@ -40,7 +40,7 @@ use const STR_PAD_LEFT;
  * Class TwoFactorAuth
  *
  * @author Bas Milius <bas@mili.us>
- * @package Raxos\Foundation\Security\TwoFactor
+ * @package Raxos\Security\TwoFactor
  * @since 2.0.0
  */
 readonly class TwoFactorAuth
