@@ -1,0 +1,36 @@
+{
+    "name": "raxos/security",
+    "description": "Security related utilities and features.",
+    "license": "mit",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "type": "library",
+    "authors": [
+        {
+            "name": "Bas Milius",
+            "email": "bas@mili.us"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Raxos\\Security\\": "src/"
+        }
+    },
+    "config": {
+        "platform": {
+            "php": "8.4"
+        }
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../*",
+            "symlink": true
+        }
+    ],
+    "require": {
+        "raxos/contract": "*",
+        "raxos/error": "*",
+        "raxos/foundation": "*"
+    }
+}
