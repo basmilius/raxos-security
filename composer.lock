@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fa43cdf96ac22d47dba1b36b381bb552",
+    "content-hash": "0a33e20592cfa5ee6fd6ed8ed414b5c6",
     "packages": [
         {
             "name": "jetbrains/phpstorm-attributes",
@@ -54,7 +54,10 @@
             "dist": {
                 "type": "path",
                 "url": "../contract",
-                "reference": "1e228db9825ba45c7ba627c4a6e6b3502f5796d3"
+                "reference": "0b4a947ca88d455b7d3e610d4da7af2987c3278d"
+            },
+            "require": {
+                "ext-pdo": "*"
             },
             "type": "library",
             "autoload": {
@@ -82,7 +85,7 @@
             "dist": {
                 "type": "path",
                 "url": "../error",
-                "reference": "a06705add140272eaafba19c3fc44d594140488c"
+                "reference": "cd5e99560c3577acfd627c7b1ca29cf33c5ea254"
             },
             "type": "library",
             "autoload": {
@@ -99,7 +102,7 @@
                     "email": "bas@mili.us"
                 }
             ],
-            "description": "Error handling related features.",
+            "description": "Error handling related primitives.",
             "transport-options": {
                 "relative": true
             }
@@ -110,7 +113,7 @@
             "dist": {
                 "type": "path",
                 "url": "../foundation",
-                "reference": "e0721f683de17130c7a67d8c901e8db4f2e96c0a"
+                "reference": "b3c8747f4300dd67affdc709d503b559ad3db6e5"
             },
             "require": {
                 "ext-dom": "*",
@@ -151,10 +154,12 @@
     "stability-flags": {},
     "prefer-stable": true,
     "prefer-lowest": false,
-    "platform": {},
+    "platform": {
+        "ext-openssl": "*"
+    },
     "platform-dev": {},
     "platform-overrides": {
-        "php": "8.4"
+        "php": "8.5"
     },
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }
