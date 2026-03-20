@@ -43,7 +43,7 @@ use const STR_PAD_LEFT;
  * @package Raxos\Security\TwoFactor
  * @since 2.0.0
  */
-final readonly class TwoFactorAuth
+readonly class TwoFactorAuth
 {
 
     public const array BASE32 = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '2', '3', '4', '5', '6', '7', '='];
@@ -177,15 +177,16 @@ final readonly class TwoFactorAuth
     public function verifyCode(string $secret, string $code, int $discrepancy = 1): bool
     {
         $timestamp = time();
-        $timeSlice = 0;
 
         for ($i = -$discrepancy; $i <= $discrepancy; $i++) {
             $ts = $timestamp + $i * $this->period;
-            $slice = $this->getTimeSlice($ts);
-            $timeSlice = hash_equals($this->generateCode($secret, $ts), $code) ? $slice : $timeSlice;
+
+            if (hash_equals($this->generateCode($secret, $ts), $code)) {
+                return true;
+            }
         }
 
-        return $timeSlice > 0;
+        return false;
     }
 
     /**

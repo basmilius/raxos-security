@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Raxos\Security;
 
-use JetBrains\PhpStorm\Pure;
+use InvalidArgumentException;
 use function array_map;
 use function base64_decode;
 use function base64_encode;
@@ -32,10 +32,10 @@ final class Base64
      * @author Bas Milius <bas@mili.us>
      * @since 2.0.0
      */
-    #[Pure]
     public static function decode(string $data): string
     {
-        return base64_decode($data);
+        return base64_decode($data, true)
+            ?: throw new InvalidArgumentException('Invalid base64 data.');
     }
 
     /**
@@ -100,7 +100,6 @@ final class Base64
      * @author Bas Milius <bas@mili.us>
      * @since 2.0.0
      */
-    #[Pure]
     public static function decodeUrlSafe(string $data): string
     {
         return self::decode(strtr($data, [
