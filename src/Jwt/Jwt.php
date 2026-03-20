@@ -27,7 +27,7 @@ use const JSON_THROW_ON_ERROR;
  * @package Raxos\Security\Jwt
  * @since 2.0.0
  */
-class Jwt
+final class Jwt
 {
 
     public static ?int $currentTime = null;

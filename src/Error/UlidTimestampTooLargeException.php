@@ -25,7 +25,7 @@ final class UlidTimestampTooLargeException extends Exception implements UlidExce
     public function __construct()
     {
         parent::__construct(
-            'ulid_invalid_length',
+            'ulid_timestamp_too_large',
             'Timestamp too large for ULID.'
         );
     }

@@ -29,7 +29,7 @@ final class UlidWrongCharactersException extends Exception implements UlidExcept
     )
     {
         parent::__construct(
-            'ulid_invalid_length',
+            'ulid_wrong_characters',
             "Wrong characters in ULID string '{$this->value}'."
         );
     }

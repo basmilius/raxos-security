@@ -43,7 +43,7 @@ use const STR_PAD_LEFT;
  * @package Raxos\Security\TwoFactor
  * @since 2.0.0
  */
-readonly class TwoFactorAuth
+final readonly class TwoFactorAuth
 {
 
     public const array BASE32 = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '2', '3', '4', '5', '6', '7', '='];
@@ -140,14 +140,26 @@ readonly class TwoFactorAuth
      */
     public function generateQrData(string $secret, string $label): string
     {
-        return vsprintf('otpauth://totp/%s?secret=%s&issuer=%s&period=%d&algorithm=%s&digits=%d', [
+        $params = [
             rawurlencode($label),
             rawurlencode($secret),
-            rawurlencode($this->issuer),
             $this->period,
             rawurlencode(strtoupper($this->algorithm->value)),
             $this->digits
-        ]);
+        ];
+
+        if ($this->issuer !== null) {
+            return vsprintf('otpauth://totp/%s?secret=%s&issuer=%s&period=%d&algorithm=%s&digits=%d', [
+                $params[0],
+                $params[1],
+                rawurlencode($this->issuer),
+                $params[2],
+                $params[3],
+                $params[4]
+            ]);
+        }
+
+        return vsprintf('otpauth://totp/%s?secret=%s&period=%d&algorithm=%s&digits=%d', $params);
     }
 
     /**

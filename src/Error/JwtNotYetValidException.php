@@ -25,7 +25,7 @@ final class JwtNotYetValidException extends Exception implements JwtExceptionInt
     public function __construct()
     {
         parent::__construct(
-            'jwt_expired',
+            'jwt_not_yet_valid',
             'The JWT token is not yet valid.'
         );
     }

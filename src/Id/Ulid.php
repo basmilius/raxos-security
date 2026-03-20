@@ -118,7 +118,9 @@ final class Ulid implements Stringable
                 self::$lastRandomChars[$i] = 0;
             }
 
-            self::$lastRandomChars[$i]++;
+            if ($i >= 0) {
+                self::$lastRandomChars[$i]++;
+            }
         }
 
         for ($i = 0; $i < self::RANDOM_LENGTH; $i++) {

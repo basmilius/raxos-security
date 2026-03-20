@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Raxos\Security;
 
 use JetBrains\PhpStorm\ExpectedValues;
+use function hash_equals;
 use function hash_hmac;
 
 /**
@@ -90,14 +91,21 @@ final class Hmac
      * @param string $actual
      * @param string $data
      * @param string $key
+     * @param string $algo
      *
      * @return bool
      * @author Bas Milius <bas@mili.us>
      * @since 2.0.0
      */
-    public static function matches(string $actual, string $data, string $key): bool
+    public static function matches(
+        string $actual,
+        string $data,
+        string $key,
+        #[ExpectedValues(values: self::ALGOS)]
+        string $algo = 'sha256'
+    ): bool
     {
-        return $actual === self::get($data, $key);
+        return hash_equals($actual, self::get($data, $key, $algo));
     }
 
 }

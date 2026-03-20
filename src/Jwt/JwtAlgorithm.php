@@ -98,7 +98,7 @@ enum JwtAlgorithm: string
                 $result = openssl_verify($message, $signature, $key, $algorithm);
 
                 if ($result === -1) {
-                    throw new JwtEncryptionException(openssl_error_string());
+                    throw new JwtEncryptionException(openssl_error_string() ?: 'Unknown OpenSSL error.');
                 }
 
                 return $result === 1;

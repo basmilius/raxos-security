@@ -20,7 +20,7 @@ use function strtr;
  * @package Raxos\Security
  * @since 2.0.0
  */
-class Base64
+final class Base64
 {
 
     /**
