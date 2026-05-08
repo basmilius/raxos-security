@@ -47,7 +47,6 @@ final class Base64
      * @author Bas Milius <bas@mili.us>
      * @since 2.0.0
      */
-    #[Pure]
     public static function encode(string $data): string
     {
         return base64_encode($data);
@@ -117,7 +116,6 @@ final class Base64
      * @author Bas Milius <bas@mili.us>
      * @since 2.0.0
      */
-    #[Pure]
     public static function encodeUrlSafe(string $data): string
     {
         return strtr(self::encode($data), [

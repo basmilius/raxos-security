@@ -52,7 +52,7 @@ final class Jwt
      */
     public static function decode(string $jwt, array $keys, array $allowedAlgorithms = []): array
     {
-        $currentTime = static::$currentTime ?? time();
+        $currentTime = self::$currentTime ?? time();
 
         if (empty($keys)) {
             throw new InvalidArgumentException('At least one key is required.');
@@ -66,8 +66,8 @@ final class Jwt
 
         [$header64, $payload64, $signature64] = $segments;
 
-        $header = static::jsonDecode(Base64::decodeUrlSafe($header64));
-        $payload = static::jsonDecode(Base64::decodeUrlSafe($payload64));
+        $header = self::jsonDecode(Base64::decodeUrlSafe($header64));
+        $payload = self::jsonDecode(Base64::decodeUrlSafe($payload64));
         $signature = Base64::decodeUrlSafe($signature64);
 
         if ($header === null || $payload === null || empty($signature)) {
@@ -106,15 +106,15 @@ final class Jwt
             throw new JwtInvalidSignatureException();
         }
 
-        if (array_key_exists('nbf', $payload) && $payload['nbf'] > ($currentTime + static::$leeway)) {
+        if (array_key_exists('nbf', $payload) && $payload['nbf'] > ($currentTime + self::$leeway)) {
             throw new JwtNotYetValidException();
         }
 
-        if (array_key_exists('iat', $payload) && $payload['iat'] > ($currentTime + static::$leeway)) {
+        if (array_key_exists('iat', $payload) && $payload['iat'] > ($currentTime + self::$leeway)) {
             throw new JwtNotYetValidException();
         }
 
-        if (array_key_exists('exp', $payload) && ($currentTime - static::$leeway) >= $payload['exp']) {
+        if (array_key_exists('exp', $payload) && ($currentTime - self::$leeway) >= $payload['exp']) {
             throw new JwtExpiredException();
         }
 
@@ -148,8 +148,8 @@ final class Jwt
         }
 
         $segments = [];
-        $segments[] = Base64::encodeUrlSafe(static::jsonEncode($headers));
-        $segments[] = Base64::encodeUrlSafe(static::jsonEncode($payload));
+        $segments[] = Base64::encodeUrlSafe(self::jsonEncode($headers));
+        $segments[] = Base64::encodeUrlSafe(self::jsonEncode($payload));
 
         $plainToken = implode('.', $segments);
 
