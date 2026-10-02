@@ -3,8 +3,9 @@ declare(strict_types=1);
 
 use Raxos\Error\InvalidArgumentException;
 use Raxos\Security\Error\TwoFactorAuthInvalidDataException;
-use Raxos\Security\TwoFactor\TwoFactorAuth;
-use Raxos\Security\TwoFactor\TwoFactorAuthAlgorithm;
+use Raxos\Security\TwoFactor\{TwoFactorAuth, TwoFactorAuthAlgorithm};
+
+covers(TwoFactorAuth::class);
 
 it('matches the RFC6238 SHA1 vectors before and after 2038', function (int $time, string $expected): void {
     // https://www.rfc-editor.org/rfc/rfc6238#appendix-B
@@ -29,11 +30,11 @@ it('encodes provisioning labels and settings in the OTP URI', function (): void 
 });
 
 it('rejects invalid two-factor settings', function (int $digits, int $period): void {
-    expect(fn(): TwoFactorAuth => new TwoFactorAuth(digits: $digits, period: $period))->toThrow(InvalidArgumentException::class);
+    expect(fn (): TwoFactorAuth => new TwoFactorAuth(digits: $digits, period: $period))->toThrow(InvalidArgumentException::class);
 })->with([[0, 30], [-1, 30], [6, 0], [6, -1]]);
 
 it('rejects malformed or empty two-factor secrets', function (string $secret): void {
-    expect(fn(): string => new TwoFactorAuth()->generateCode($secret, 59))->toThrow(TwoFactorAuthInvalidDataException::class);
+    expect(fn (): string => new TwoFactorAuth()->generateCode($secret, 59))->toThrow(TwoFactorAuthInvalidDataException::class);
 })->with(['', 'INVALID!']);
 
 it('matches the RFC6238 SHA256 and SHA512 vectors', function (TwoFactorAuthAlgorithm $algorithm, string $secret, int $time, string $expected): void {

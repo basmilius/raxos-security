@@ -81,7 +81,7 @@ enum JwtAlgorithm: string
      * @return bool
      * @throws JwtExceptionInterface
      * @author Bas Milius <bas@mili.us>
-     * @since 2.0.0
+     * @since 3.2.0
      */
     public function verify(string $key, string $signature, string $message): bool
     {
@@ -102,7 +102,7 @@ enum JwtAlgorithm: string
             case self::RS512:
                 $result = openssl_verify($message, $signature, $key, $algorithm);
 
-                if ($result === -1) {
+                if ($result === -1 || $result === false) {
                     throw new JwtEncryptionException(openssl_error_string() ?: 'Unknown OpenSSL error.');
                 }
 
