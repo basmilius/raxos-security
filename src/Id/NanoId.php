@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Raxos\Security\Id;
 
 use Random\RandomException;
+use Raxos\Error\InvalidArgumentException;
 use function ceil;
 use function log;
 use function random_bytes;
@@ -35,6 +36,10 @@ final class NanoId
      */
     public static function generate(int $length = 16): string
     {
+        if ($length < 1) {
+            throw new InvalidArgumentException('Nano ID length must be positive.');
+        }
+
         $availableSymbols = strlen(self::SYMBOLS);
         $mask = (2 << (int)(log($availableSymbols - 1) / M_LN2)) - 1;
         $step = (int)ceil(1.6 * $mask * $length / $availableSymbols);

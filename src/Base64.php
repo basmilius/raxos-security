@@ -34,8 +34,9 @@ final class Base64
      */
     public static function decode(string $data): string
     {
-        return base64_decode($data, true)
-            ?: throw new InvalidArgumentException('Invalid base64 data.');
+        $decoded = base64_decode($data, true);
+
+        return $decoded !== false ? $decoded : throw new InvalidArgumentException('Invalid base64 data.');
     }
 
     /**

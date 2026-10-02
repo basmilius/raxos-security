@@ -10,6 +10,7 @@ use function hash_hmac;
 use function openssl_error_string;
 use function openssl_sign;
 use function openssl_verify;
+use function str_contains;
 
 /**
  * Enum JwtAlgorithm
@@ -50,6 +51,10 @@ enum JwtAlgorithm: string
             case self::HS256:
             case self::HS384:
             case self::HS512:
+                if (str_contains($key, '-----BEGIN ')) {
+                    throw new JwtEncryptionException('An asymmetric key cannot be used with HMAC.');
+                }
+
                 return hash_hmac($algorithm, $message, $key, binary: true);
 
             case self::RS256:
@@ -90,7 +95,7 @@ enum JwtAlgorithm: string
             case self::HS256:
             case self::HS384:
             case self::HS512:
-                return hash_equals($signature, hash_hmac($algorithm, $message, $key, binary: true));
+                return hash_equals($signature, $this->sign($key, $message));
 
             case self::RS256:
             case self::RS384:

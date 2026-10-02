@@ -1,7 +1,7 @@
 {
     "name": "raxos/security",
     "description": "Security related utilities and features.",
-    "license": "mit",
+    "license": "MIT",
     "minimum-stability": "dev",
     "prefer-stable": true,
     "type": "library",
@@ -19,6 +19,9 @@
     "config": {
         "platform": {
             "php": "8.5"
+        },
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
         }
     },
     "repositories": [
@@ -30,8 +33,20 @@
     ],
     "require": {
         "ext-openssl": "*",
+        "php": ">=8.5",
         "raxos/contract": "*",
         "raxos/error": "*",
         "raxos/foundation": "*"
+    },
+    "require-dev": {
+        "pestphp/pest": "^5.0"
+    },
+    "autoload-dev": {
+        "classmap": [
+            "tests/Fixtures/"
+        ]
+    },
+    "scripts": {
+        "test": "pest --compact"
     }
 }

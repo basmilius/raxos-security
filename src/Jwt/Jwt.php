@@ -13,10 +13,11 @@ use function array_shift;
 use function count;
 use function explode;
 use function implode;
+use function is_array;
+use function is_string;
 use function json_decode;
 use function json_encode;
 use function sprintf;
-use function strtoupper;
 use const JSON_BIGINT_AS_STRING;
 use const JSON_THROW_ON_ERROR;
 
@@ -50,9 +51,13 @@ final class Jwt
      * @see Jwt::jsonDecode()
      * @see Jwt::urlsafeB64Decode()
      */
-    public static function decode(string $jwt, array $keys, array $allowedAlgorithms = []): array
+    public static function decode(string $jwt, array $keys, array $allowedAlgorithms = [JwtAlgorithm::HS256]): array
     {
         $currentTime = self::$currentTime ?? time();
+
+        if ($allowedAlgorithms === []) {
+            throw new InvalidArgumentException('At least one allowed algorithm is required.');
+        }
 
         if (empty($keys)) {
             throw new InvalidArgumentException('At least one key is required.');
@@ -70,27 +75,27 @@ final class Jwt
         $payload = self::jsonDecode(Base64::decodeUrlSafe($payload64));
         $signature = Base64::decodeUrlSafe($signature64);
 
-        if ($header === null || $payload === null || empty($signature)) {
+        if (!is_array($header) || !is_array($payload) || empty($signature)) {
             throw new InvalidArgumentException('Invalid encoding of segment.');
         }
 
-        if (!array_key_exists('alg', $header)) {
+        if (!isset($header['alg']) || !is_string($header['alg'])) {
             throw new InvalidArgumentException('Unknown algorithm.');
         }
 
-        $algorithm = JwtAlgorithm::tryFrom(strtoupper($header['alg']));
+        $algorithm = JwtAlgorithm::tryFrom($header['alg']);
 
         if ($algorithm === null) {
             throw new JwtUnsupportedException('Algorithm not supported.');
         }
 
-        if (count($allowedAlgorithms) > 0 && !in_array($algorithm, $allowedAlgorithms, true)) {
+        if (!in_array($algorithm, $allowedAlgorithms, true)) {
             throw new InvalidArgumentException(sprintf('Algorithm "%s" not allowed.', $algorithm->value));
         }
 
         if (count($keys) > 1) {
             if (isset($header['kid'])) {
-                if (isset($keys[$header['kid']])) {
+                if (is_string($header['kid']) && isset($keys[$header['kid']])) {
                     $key = $keys[$header['kid']];
                 } else {
                     throw new InvalidArgumentException('Key ID (kid) is invalid, key does not exist.');

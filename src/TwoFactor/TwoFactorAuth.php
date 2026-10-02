@@ -202,7 +202,7 @@ readonly class TwoFactorAuth
     private function base32Decode(string $value): string
     {
         if (empty($value)) {
-            return '';
+            throw new TwoFactorAuthInvalidDataException('The secret cannot be empty.');
         }
 
         if (preg_match('/[^' . preg_quote(implode('', self::BASE32)) . ']/', $value) !== 0) {

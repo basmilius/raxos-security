@@ -5,6 +5,7 @@ namespace Raxos\Security\Id;
 
 use Random\RandomException;
 use Raxos\Contract\Security\UlidExceptionInterface;
+use Raxos\Error\InvalidArgumentException;
 use Raxos\Security\Error\{UlidInvalidLengthException, UlidTimestampTooLargeException, UlidWrongCharactersException};
 use Stringable;
 use function microtime;
@@ -78,7 +79,10 @@ final class Ulid implements Stringable
             throw new UlidWrongCharactersException($value);
         }
 
-        return new self(substr($value, 0, self::TIME_LENGTH), substr($value, self::TIME_LENGTH, self::RANDOM_LENGTH), $lowercase);
+        $id = new self(substr($value, 0, self::TIME_LENGTH), substr($value, self::TIME_LENGTH, self::RANDOM_LENGTH), $lowercase);
+        $id->toTimestamp();
+
+        return $id;
     }
 
     /**
@@ -94,7 +98,15 @@ final class Ulid implements Stringable
      */
     public static function fromTimestamp(int $milliseconds, bool $lowercase = false): self
     {
-        $duplicateTime = $milliseconds === self::$lastGeneratedTime;
+        if ($milliseconds < 0) {
+            throw new InvalidArgumentException('ULID timestamps cannot be negative.');
+        }
+
+        if ($milliseconds > self::TIME_MAX) {
+            throw new UlidTimestampTooLargeException();
+        }
+
+        $duplicateTime = self::$lastRandomChars !== [] && $milliseconds === self::$lastGeneratedTime;
 
         self::$lastGeneratedTime = $milliseconds;
 
