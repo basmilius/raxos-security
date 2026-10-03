@@ -19,11 +19,11 @@ afterEach(function (): void {
 });
 
 it('round trips HMAC tokens with an explicitly permitted algorithm', function (JwtAlgorithm $algorithm): void {
-    $token = Jwt::encode(['sub' => 'passly', 'exp' => 1_100], 'secret', $algorithm);
-    expect(Jwt::decode($token, ['secret'], [$algorithm]))->toBe(['sub' => 'passly', 'exp' => 1_100]);
+    $token = Jwt::encode(['sub' => 'example-user', 'exp' => 1_100], 'secret', $algorithm);
+    expect(Jwt::decode($token, ['secret'], [$algorithm]))->toBe(['sub' => 'example-user', 'exp' => 1_100]);
 })->with([JwtAlgorithm::HS256, JwtAlgorithm::HS384, JwtAlgorithm::HS512]);
 
-it('keeps the HS256 default used by Passly', function (): void {
+it('uses HS256 as the default decoding policy', function (): void {
     expect(Jwt::decode(Jwt::encode(['sub' => 'wallet'], 'secret'), ['secret']))->toBe(['sub' => 'wallet']);
 });
 
