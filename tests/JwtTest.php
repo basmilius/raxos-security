@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 use Raxos\Error\InvalidArgumentException;
 use Raxos\Security\Base64;
-use Raxos\Security\Error\{JwtEncryptionException, JwtExpiredException, JwtInvalidSignatureException, JwtNotYetValidException};
+use Raxos\Security\Error\{JwtEncodingException, JwtEncryptionException, JwtExpiredException, JwtInvalidSignatureException, JwtNotYetValidException, JwtUnsupportedException};
 use Raxos\Security\Jwt\{Jwt, JwtAlgorithm};
 
 covers(Jwt::class);
@@ -81,11 +81,11 @@ it('rejects empty keys, missing segments, unknown algorithms and corrupt JSON', 
     foreach ([['alg' => 'none'], ['alg' => null], [], ['alg' => ['HS256']]] as $headers) {
         $message = Base64::encodeUrlSafe(json_encode($headers)) . '.' . Base64::encodeUrlSafe('{}');
         $token = $message . '.' . Base64::encodeUrlSafe(hash_hmac('sha256', $message, 'secret', true));
-        expect(fn() => Jwt::decode($token, ['secret']))->toThrow($headers === ['alg' => 'none'] ? Raxos\Security\Error\JwtUnsupportedException::class : InvalidArgumentException::class);
+        expect(fn() => Jwt::decode($token, ['secret']))->toThrow($headers === ['alg' => 'none'] ? JwtUnsupportedException::class : InvalidArgumentException::class);
     }
     $token = Base64::encodeUrlSafe('{bad json') . '.' . Base64::encodeUrlSafe('{}') . '.' . Base64::encodeUrlSafe('signature');
-    expect(fn() => Jwt::decode($token, ['secret']))->toThrow(Raxos\Security\Error\JwtEncodingException::class);
-    expect(fn() => Jwt::encode(['invalid' => "\xff"], 'secret'))->toThrow(Raxos\Security\Error\JwtEncodingException::class);
+    expect(fn() => Jwt::decode($token, ['secret']))->toThrow(JwtEncodingException::class);
+    expect(fn() => Jwt::encode(['invalid' => "\xff"], 'secret'))->toThrow(JwtEncodingException::class);
 });
 
 it('enforces issued-at bounds and expiration leeway at the exact boundary', function (): void {

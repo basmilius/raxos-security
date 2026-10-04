@@ -22,6 +22,7 @@ use function str_contains;
  */
 enum JwtAlgorithm: string
 {
+
     case HS256 = 'HS256';
     case HS384 = 'HS384';
     case HS512 = 'HS512';
@@ -119,4 +120,5 @@ enum JwtAlgorithm: string
 
         throw new JwtUnsupportedException('Algorithm not supported.');
     }
+
 }

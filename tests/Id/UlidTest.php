@@ -1,7 +1,9 @@
 <?php
 declare(strict_types=1);
 
-use Raxos\Security\Id\{Ulid};
+use Raxos\Error\InvalidArgumentException;
+use Raxos\Security\Error\{UlidInvalidLengthException, UlidTimestampTooLargeException, UlidWrongCharactersException};
+use Raxos\Security\Id\Ulid;
 
 covers(Ulid::class);
 
@@ -22,14 +24,14 @@ it('generates strictly increasing ULIDs within one millisecond', function (): vo
 
 it('rejects out-of-range ULID timestamps', function (int $timestamp, string $exception): void {
     expect(fn(): Ulid => Ulid::fromTimestamp($timestamp))->toThrow($exception);
-})->with([[-1, Raxos\Error\InvalidArgumentException::class], [Ulid::TIME_MAX + 1, Raxos\Security\Error\UlidTimestampTooLargeException::class]]);
+})->with([[-1, InvalidArgumentException::class], [Ulid::TIME_MAX + 1, UlidTimestampTooLargeException::class]]);
 
 it('rejects malformed ULID strings', function (string $value, string $exception): void {
     expect(fn(): Ulid => Ulid::fromString($value))->toThrow($exception);
 })->with([
-    ['', Raxos\Security\Error\UlidInvalidLengthException::class],
-    [str_repeat('I', 26), Raxos\Security\Error\UlidWrongCharactersException::class],
-    [str_repeat('Z', 26), Raxos\Security\Error\UlidTimestampTooLargeException::class],
+    ['', UlidInvalidLengthException::class],
+    [str_repeat('I', 26), UlidWrongCharactersException::class],
+    [str_repeat('Z', 26), UlidTimestampTooLargeException::class],
 ]);
 
 it('generates an identifier in the current timestamp interval', function (): void {
@@ -41,5 +43,5 @@ it('generates an identifier in the current timestamp interval', function (): voi
 });
 
 it('rejects malformed timestamp characters in directly constructed identifiers', function (): void {
-    expect(fn() => new Ulid('IIIIIIIIII', str_repeat('0', 16))->toTimestamp())->toThrow(Raxos\Security\Error\UlidWrongCharactersException::class);
+    expect(fn() => new Ulid('IIIIIIIIII', str_repeat('0', 16))->toTimestamp())->toThrow(UlidWrongCharactersException::class);
 });

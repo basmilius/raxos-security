@@ -16,6 +16,7 @@ use SensitiveParameter;
  */
 final readonly class JwtVerificationKey
 {
+
     /**
      * Binds the key to one permitted signing algorithm instead of trusting the token header.
      *
@@ -29,4 +30,5 @@ final readonly class JwtVerificationKey
         #[SensitiveParameter] public string $key,
         public JwtAlgorithm $algorithm = JwtAlgorithm::HS256
     ) {}
+
 }

@@ -38,6 +38,7 @@ use const JSON_THROW_ON_ERROR;
  */
 final class Jwt
 {
+
     /**
      * Provides the legacy process-wide clock override; instance verifiers use their own clock.
      *
@@ -277,4 +278,5 @@ final class Jwt
             throw new JwtEncodingException($err);
         }
     }
+
 }

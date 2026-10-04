@@ -16,6 +16,7 @@ use Raxos\Error\InvalidArgumentException;
  */
 final readonly class JwtVerificationPolicy
 {
+
     /**
      * Defines instance-local key selection, required claims and allowed clock skew in seconds.
      *
@@ -47,4 +48,5 @@ final readonly class JwtVerificationPolicy
             }
         }
     }
+
 }

@@ -31,6 +31,7 @@ use const JSON_THROW_ON_ERROR;
  */
 final readonly class JwtVerifier
 {
+
     /**
      * Keeps claim policy and clock local to this verifier, without changing JWT static configuration.
      *
@@ -114,4 +115,5 @@ final readonly class JwtVerifier
 
         return $claims;
     }
+
 }

@@ -79,4 +79,5 @@ final class NanoId
     {
         return unpack('C*', random_bytes($length));
     }
+
 }

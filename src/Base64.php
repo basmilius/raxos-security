@@ -22,6 +22,7 @@ use function strtr;
  */
 final class Base64
 {
+
     /**
      * Decodes the given base64 string.
      *
@@ -130,4 +131,5 @@ final class Base64
             '=' => ''
         ]);
     }
+
 }

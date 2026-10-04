@@ -1,7 +1,8 @@
 <?php
 declare(strict_types=1);
 
-use Raxos\Security\Id\{NanoId};
+use Raxos\Error\InvalidArgumentException;
+use Raxos\Security\Id\NanoId;
 
 covers(NanoId::class);
 
@@ -11,5 +12,5 @@ it('generates Nano IDs with the requested length and alphabet', function (int $l
 })->with([1, 16, 21, 64]);
 
 it('rejects non-positive Nano ID lengths', function (int $length): void {
-    expect(fn(): string => NanoId::generate($length))->toThrow(Raxos\Error\InvalidArgumentException::class);
+    expect(fn(): string => NanoId::generate($length))->toThrow(InvalidArgumentException::class);
 })->with([0, -1]);

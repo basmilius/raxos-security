@@ -212,6 +212,7 @@ final class Ulid implements Stringable
 
     /**
      * {@inheritdoc}
+     *
      * @author Bas Milius <bas@mili.us>
      * @since 2.0.0
      */
@@ -219,4 +220,5 @@ final class Ulid implements Stringable
     {
         return ($value = $this->time . $this->randomness) && $this->lowercase ? strtolower($value) : strtoupper($value);
     }
+
 }

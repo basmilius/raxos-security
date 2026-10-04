@@ -251,4 +251,5 @@ readonly class TwoFactorAuth
     {
         return (int)floor($time / $this->period);
     }
+
 }
