@@ -20,6 +20,6 @@ it('allows a zero delay and an operation already slower than the configured dura
         if ($milliseconds > 0) {
             usleep(2000);
         }
-        expect(fn () => $prevention->end())->not->toThrow(Throwable::class);
+        expect(fn() => $prevention->end())->not->toThrow(Throwable::class);
     }
 });

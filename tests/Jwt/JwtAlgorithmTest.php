@@ -25,14 +25,14 @@ it('signs and verifies RSA messages with each supported digest', function (JwtAl
 })->with([JwtAlgorithm::RS256, JwtAlgorithm::RS384, JwtAlgorithm::RS512]);
 
 it('rejects PEM material as a HMAC secret before producing a signature', function (JwtAlgorithm $algorithm): void {
-    expect(fn () => $algorithm->sign('-----BEGIN PUBLIC KEY-----', 'message'))->toThrow(JwtEncryptionException::class);
+    expect(fn() => $algorithm->sign('-----BEGIN PUBLIC KEY-----', 'message'))->toThrow(JwtEncryptionException::class);
 })->with([JwtAlgorithm::HS256, JwtAlgorithm::HS384, JwtAlgorithm::HS512]);
 
 it('reports invalid RSA key material rather than treating it as a failed signature', function (): void {
-    set_error_handler(static fn (int $severity, string $message): bool => $severity === E_WARNING && str_starts_with($message, 'openssl_'));
+    set_error_handler(static fn(int $severity, string $message): bool => $severity === E_WARNING && str_starts_with($message, 'openssl_'));
     try {
-        expect(fn () => JwtAlgorithm::RS256->sign('invalid', 'message'))->toThrow(JwtEncryptionException::class)
-            ->and(fn () => JwtAlgorithm::RS256->verify('invalid', 'signature', 'message'))->toThrow(JwtEncryptionException::class);
+        expect(fn() => JwtAlgorithm::RS256->sign('invalid', 'message'))->toThrow(JwtEncryptionException::class)
+            ->and(fn() => JwtAlgorithm::RS256->verify('invalid', 'signature', 'message'))->toThrow(JwtEncryptionException::class);
     } finally {
         restore_error_handler();
     }

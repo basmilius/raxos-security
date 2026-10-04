@@ -24,6 +24,7 @@ final readonly class JwtVerificationPolicy
      * @param string|null $audience
      * @param int $leeway
      * @param bool $requireExpiration
+     *
      * @throws InvalidArgumentException
      * @author Bas Milius <bas@mili.us>
      * @since 3.3.0

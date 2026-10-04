@@ -71,9 +71,7 @@ final class Ulid implements Stringable
         public readonly string $time,
         public readonly string $randomness,
         public readonly bool $lowercase = false
-    )
-    {
-    }
+    ) {}
 
     /**
      * Generates a new ulid from a string.

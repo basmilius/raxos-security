@@ -36,20 +36,20 @@ final readonly class JwtVerifier
      *
      * @param JwtVerificationPolicy $policy
      * @param ClockInterface $clock
+     *
      * @author Bas Milius <bas@mili.us>
      * @since 3.3.0
      */
     public function __construct(
         public JwtVerificationPolicy $policy,
         public ClockInterface $clock = new SystemClock()
-    )
-    {
-    }
+    ) {}
 
     /**
      * Selects an allowed key, verifies its bound algorithm and validates time, issuer and audience claims.
      *
      * @param string $token
+     *
      * @return array<string, mixed>
      * @throws InvalidArgumentException|JwtExceptionInterface
      * @author Bas Milius <bas@mili.us>

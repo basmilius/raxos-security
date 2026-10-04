@@ -16,9 +16,7 @@ covers(JwtVerifier::class, JwtVerificationPolicy::class, JwtVerificationKey::cla
 function verifierClock(int $time): ClockInterface
 {
     return new readonly class($time) implements ClockInterface {
-        public function __construct(private int $time)
-        {
-        }
+        public function __construct(private int $time) {}
 
         public function now(): DateTimeImmutable
         {

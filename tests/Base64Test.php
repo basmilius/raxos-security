@@ -12,7 +12,7 @@ it('preserves binary and falsey input in every Base64 variant', function (string
 })->with(['', '0', "\0\xff\xfe\0", 'Hello world!', 'é😀', str_repeat('raxos', 100)]);
 
 it('rejects malformed Base64', function (string $value): void {
-    expect(fn (): string => Base64::decode($value))->toThrow(InvalidArgumentException::class);
+    expect(fn(): string => Base64::decode($value))->toThrow(InvalidArgumentException::class);
 })->with(['%%%', 'a', 'YWJj!']);
 
 it('matches known Base64 vectors and removes URL padding', function (string $plain, string $encoded): void {
@@ -22,6 +22,6 @@ it('matches known Base64 vectors and removes URL padding', function (string $pla
 })->with([['f', 'Zg=='], ['fo', 'Zm8='], ['foo', 'Zm9v'], ['foobar', 'Zm9vYmFy']]);
 
 it('rejects invalid URL and shuffled encodings', function (): void {
-    expect(fn () => Base64::decodeUrlSafe('%%%'))->toThrow(InvalidArgumentException::class)
-        ->and(fn () => Base64::decodeShuffle('%%%'))->toThrow(InvalidArgumentException::class);
+    expect(fn() => Base64::decodeUrlSafe('%%%'))->toThrow(InvalidArgumentException::class)
+        ->and(fn() => Base64::decodeShuffle('%%%'))->toThrow(InvalidArgumentException::class);
 });

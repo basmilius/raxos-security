@@ -30,11 +30,11 @@ it('encodes provisioning labels and settings in the OTP URI', function (): void 
 });
 
 it('rejects invalid two-factor settings', function (int $digits, int $period): void {
-    expect(fn (): TwoFactorAuth => new TwoFactorAuth(digits: $digits, period: $period))->toThrow(InvalidArgumentException::class);
+    expect(fn(): TwoFactorAuth => new TwoFactorAuth(digits: $digits, period: $period))->toThrow(InvalidArgumentException::class);
 })->with([[0, 30], [-1, 30], [6, 0], [6, -1]]);
 
 it('rejects malformed or empty two-factor secrets', function (string $secret): void {
-    expect(fn (): string => new TwoFactorAuth()->generateCode($secret, 59))->toThrow(TwoFactorAuthInvalidDataException::class);
+    expect(fn(): string => new TwoFactorAuth()->generateCode($secret, 59))->toThrow(TwoFactorAuthInvalidDataException::class);
 })->with(['', 'INVALID!']);
 
 it('matches the RFC6238 SHA256 and SHA512 vectors', function (TwoFactorAuthAlgorithm $algorithm, string $secret, int $time, string $expected): void {

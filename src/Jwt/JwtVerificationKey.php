@@ -21,13 +21,12 @@ final readonly class JwtVerificationKey
      *
      * @param string $key
      * @param JwtAlgorithm $algorithm
+     *
      * @author Bas Milius <bas@mili.us>
      * @since 3.3.0
      */
     public function __construct(
         #[SensitiveParameter] public string $key,
         public JwtAlgorithm $algorithm = JwtAlgorithm::HS256
-    )
-    {
-    }
+    ) {}
 }

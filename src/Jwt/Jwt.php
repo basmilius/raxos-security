@@ -89,6 +89,7 @@ final class Jwt
      * @param JwtAlgorithm[] $allowedAlgorithms
      * @param int $currentTime
      * @param int $leeway
+     *
      * @return array
      * @throws InvalidArgumentException|JwtExceptionInterface
      * @author Bas Milius <bas@mili.us>

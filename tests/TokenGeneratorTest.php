@@ -15,6 +15,6 @@ it('generates cryptographic tokens containing the requested number of bytes', fu
 
 it('produces independent tokens and rejects nonpositive byte counts', function (): void {
     expect(TokenGenerator::generateCryptographicallySecureToken(32))->not->toBe(TokenGenerator::generateCryptographicallySecureToken(32))
-        ->and(fn () => TokenGenerator::generateCryptographicallySecureToken(0))->toThrow(ValueError::class)
-        ->and(fn () => TokenGenerator::generateCryptographicallySecureToken(-1))->toThrow(ValueError::class);
+        ->and(fn() => TokenGenerator::generateCryptographicallySecureToken(0))->toThrow(ValueError::class)
+        ->and(fn() => TokenGenerator::generateCryptographicallySecureToken(-1))->toThrow(ValueError::class);
 });

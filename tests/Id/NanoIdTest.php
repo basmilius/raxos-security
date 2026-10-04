@@ -11,5 +11,5 @@ it('generates Nano IDs with the requested length and alphabet', function (int $l
 })->with([1, 16, 21, 64]);
 
 it('rejects non-positive Nano ID lengths', function (int $length): void {
-    expect(fn (): string => NanoId::generate($length))->toThrow(Raxos\Error\InvalidArgumentException::class);
+    expect(fn(): string => NanoId::generate($length))->toThrow(Raxos\Error\InvalidArgumentException::class);
 })->with([0, -1]);
