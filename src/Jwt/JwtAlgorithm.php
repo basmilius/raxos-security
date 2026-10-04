@@ -4,7 +4,8 @@ declare(strict_types=1);
 namespace Raxos\Security\Jwt;
 
 use Raxos\Contract\Security\JwtExceptionInterface;
-use Raxos\Security\Error\{JwtEncryptionException, JwtUnsupportedException};
+use Raxos\Security\Error\JwtEncryptionException;
+use Raxos\Security\Error\JwtUnsupportedException;
 use function hash_equals;
 use function hash_hmac;
 use function openssl_error_string;
@@ -39,7 +40,10 @@ enum JwtAlgorithm: string
      * @author Bas Milius <bas@mili.us>
      * @since 2.0.0
      */
-    public function sign(string $key, string $message): string
+    public function sign(
+        string $key,
+        string $message
+    ): string
     {
         $algorithm = match ($this) {
             self::HS256, self::RS256 => 'sha256',
@@ -81,9 +85,13 @@ enum JwtAlgorithm: string
      * @return bool
      * @throws JwtExceptionInterface
      * @author Bas Milius <bas@mili.us>
-     * @since 3.2.0
+     * @since 2.0.0
      */
-    public function verify(string $key, string $signature, string $message): bool
+    public function verify(
+        string $key,
+        string $signature,
+        string $message
+    ): bool
     {
         $algorithm = match ($this) {
             self::HS256, self::RS256 => 'sha256',
@@ -111,5 +119,4 @@ enum JwtAlgorithm: string
 
         throw new JwtUnsupportedException('Algorithm not supported.');
     }
-
 }

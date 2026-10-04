@@ -114,7 +114,10 @@ readonly class TwoFactorAuth
      * @author Bas Milius <bas@mili.us>
      * @since 2.0.0
      */
-    public function generateCode(string $secret, ?int $time = null): string
+    public function generateCode(
+        string $secret,
+        ?int $time = null
+    ): string
     {
         $time ??= time();
 
@@ -138,7 +141,10 @@ readonly class TwoFactorAuth
      * @author Bas Milius <bas@mili.us>
      * @since 2.0.0
      */
-    public function generateQrData(string $secret, string $label): string
+    public function generateQrData(
+        string $secret,
+        string $label
+    ): string
     {
         $params = [
             rawurlencode($label),
@@ -174,7 +180,11 @@ readonly class TwoFactorAuth
      * @author Bas Milius <bas@mili.us>
      * @since 2.0.0
      */
-    public function verifyCode(string $secret, string $code, int $discrepancy = 1): bool
+    public function verifyCode(
+        string $secret,
+        string $code,
+        int $discrepancy = 1
+    ): bool
     {
         $timestamp = time();
 
@@ -241,5 +251,4 @@ readonly class TwoFactorAuth
     {
         return (int)floor($time / $this->period);
     }
-
 }

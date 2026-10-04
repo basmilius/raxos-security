@@ -7,13 +7,21 @@ use JsonException;
 use Raxos\Contract\Security\JwtExceptionInterface;
 use Raxos\Error\InvalidArgumentException;
 use Raxos\Security\Base64;
-use Raxos\Security\Error\{JwtEncodingException, JwtExpiredException, JwtInvalidSignatureException, JwtNotYetValidException, JwtNullException, JwtUnsupportedException};
+use Raxos\Security\Error\JwtEncodingException;
+use Raxos\Security\Error\JwtExpiredException;
+use Raxos\Security\Error\JwtInvalidSignatureException;
+use Raxos\Security\Error\JwtNotYetValidException;
+use Raxos\Security\Error\JwtNullException;
+use Raxos\Security\Error\JwtUnsupportedException;
 use function array_key_exists;
 use function array_shift;
 use function count;
 use function explode;
 use function implode;
 use function is_array;
+use function is_finite;
+use function is_float;
+use function is_int;
 use function is_string;
 use function json_decode;
 use function json_encode;
@@ -30,9 +38,22 @@ use const JSON_THROW_ON_ERROR;
  */
 final class Jwt
 {
-
+    /**
+     * Provides the legacy process-wide clock override; instance verifiers use their own clock.
+     *
+     * @var ?int
+     * @author Bas Milius <bas@mili.us>
+     * @since 2.0.0
+     */
     public static ?int $currentTime = null;
 
+    /**
+     * Provides legacy process-wide clock skew in seconds; instance verifiers use their own policy.
+     *
+     * @var int
+     * @author Bas Milius <bas@mili.us>
+     * @since 2.0.0
+     */
     public static int $leeway = 0;
 
     /**
@@ -51,9 +72,39 @@ final class Jwt
      * @see Jwt::jsonDecode()
      * @see Jwt::urlsafeB64Decode()
      */
-    public static function decode(string $jwt, array $keys, array $allowedAlgorithms = [JwtAlgorithm::HS256]): array
+    public static function decode(
+        string $jwt,
+        array $keys,
+        array $allowedAlgorithms = [JwtAlgorithm::HS256]
+    ): array
     {
-        $currentTime = self::$currentTime ?? time();
+        return self::decodeAt($jwt, $keys, $allowedAlgorithms, self::$currentTime ?? time(), self::$leeway);
+    }
+
+    /**
+     * Verifies against explicit time and leeway without changing shared state.
+     *
+     * @param string $jwt
+     * @param array<string|int, string> $keys
+     * @param JwtAlgorithm[] $allowedAlgorithms
+     * @param int $currentTime
+     * @param int $leeway
+     * @return array
+     * @throws InvalidArgumentException|JwtExceptionInterface
+     * @author Bas Milius <bas@mili.us>
+     * @since 3.3.0
+     */
+    public static function decodeAt(
+        string $jwt,
+        array $keys,
+        array $allowedAlgorithms,
+        int $currentTime,
+        int $leeway = 0
+    ): array
+    {
+        if ($leeway < 0) {
+            throw new InvalidArgumentException('JWT leeway cannot be negative.');
+        }
 
         if ($allowedAlgorithms === []) {
             throw new InvalidArgumentException('At least one allowed algorithm is required.');
@@ -111,15 +162,21 @@ final class Jwt
             throw new JwtInvalidSignatureException();
         }
 
-        if (array_key_exists('nbf', $payload) && $payload['nbf'] > ($currentTime + self::$leeway)) {
+        foreach (['exp', 'nbf', 'iat'] as $claim) {
+            if (array_key_exists($claim, $payload) && ((!is_int($payload[$claim]) && !is_float($payload[$claim])) || !is_finite((float)$payload[$claim]))) {
+                throw new InvalidArgumentException("JWT {$claim} must be a finite NumericDate.");
+            }
+        }
+
+        if (array_key_exists('nbf', $payload) && $payload['nbf'] > ($currentTime + $leeway)) {
             throw new JwtNotYetValidException();
         }
 
-        if (array_key_exists('iat', $payload) && $payload['iat'] > ($currentTime + self::$leeway)) {
+        if (array_key_exists('iat', $payload) && $payload['iat'] > ($currentTime + $leeway)) {
             throw new JwtNotYetValidException();
         }
 
-        if (array_key_exists('exp', $payload) && ($currentTime - self::$leeway) >= $payload['exp']) {
+        if (array_key_exists('exp', $payload) && ($currentTime - $leeway) >= $payload['exp']) {
             throw new JwtExpiredException();
         }
 
@@ -143,7 +200,13 @@ final class Jwt
      * @see Jwt::jsonEncode()
      * @see Jwt::urlsafeB64Encode()
      */
-    public static function encode(array $payload, string $key, JwtAlgorithm $algorithm = JwtAlgorithm::HS256, ?string $keyId = null, array $headers = []): string
+    public static function encode(
+        array $payload,
+        string $key,
+        JwtAlgorithm $algorithm = JwtAlgorithm::HS256,
+        ?string $keyId = null,
+        array $headers = []
+    ): string
     {
         $headers['typ'] = 'JWT';
         $headers['alg'] = $algorithm->value;
@@ -213,5 +276,4 @@ final class Jwt
             throw new JwtEncodingException($err);
         }
     }
-
 }

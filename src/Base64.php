@@ -22,7 +22,6 @@ use function strtr;
  */
 final class Base64
 {
-
     /**
      * Decodes the given base64 string.
      *
@@ -63,7 +62,10 @@ final class Base64
      * @author Bas Milius <bas@mili.us>
      * @since 2.0.0
      */
-    public static function decodeShuffle(string $data, int $amount = 1): string
+    public static function decodeShuffle(
+        string $data,
+        int $amount = 1
+    ): string
     {
         $parts = str_split($data);
         $parts = array_map(static fn(string $char) => chr(ord($char) - $amount), $parts);
@@ -82,7 +84,10 @@ final class Base64
      * @author Bas Milius <bas@mili.us>
      * @since 2.0.0
      */
-    public static function encodeShuffle(string $data, int $amount = 1): string
+    public static function encodeShuffle(
+        string $data,
+        int $amount = 1
+    ): string
     {
         $data = self::encode($data);
         $parts = str_split($data);
@@ -125,5 +130,4 @@ final class Base64
             '=' => ''
         ]);
     }
-
 }

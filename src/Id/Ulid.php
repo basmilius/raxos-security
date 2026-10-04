@@ -6,7 +6,9 @@ namespace Raxos\Security\Id;
 use Random\RandomException;
 use Raxos\Contract\Security\UlidExceptionInterface;
 use Raxos\Error\InvalidArgumentException;
-use Raxos\Security\Error\{UlidInvalidLengthException, UlidTimestampTooLargeException, UlidWrongCharactersException};
+use Raxos\Security\Error\UlidInvalidLengthException;
+use Raxos\Security\Error\UlidTimestampTooLargeException;
+use Raxos\Security\Error\UlidWrongCharactersException;
 use Stringable;
 use function microtime;
 use function pow;
@@ -37,7 +39,22 @@ final class Ulid implements Stringable
     public const int TIME_LENGTH = 10;
     public const int RANDOM_LENGTH = 16;
 
+    /**
+     * Tracks the previous ULID timestamp to preserve ordering for same-millisecond IDs.
+     *
+     * @var int
+     * @author Bas Milius <bas@mili.us>
+     * @since 2.0.0
+     */
     private static int $lastGeneratedTime = 0;
+
+    /**
+     * Carries the previous random suffix for monotonic ULID generation.
+     *
+     * @var array
+     * @author Bas Milius <bas@mili.us>
+     * @since 2.0.0
+     */
     private static array $lastRandomChars = [];
 
     /**
@@ -54,7 +71,9 @@ final class Ulid implements Stringable
         public readonly string $time,
         public readonly string $randomness,
         public readonly bool $lowercase = false
-    ) {}
+    )
+    {
+    }
 
     /**
      * Generates a new ulid from a string.
@@ -67,7 +86,10 @@ final class Ulid implements Stringable
      * @author Bas Milius <bas@mili.us>
      * @since 2.0.0
      */
-    public static function fromString(string $value, bool $lowercase = false): self
+    public static function fromString(
+        string $value,
+        bool $lowercase = false
+    ): self
     {
         if (strlen($value) !== self::TIME_LENGTH + self::RANDOM_LENGTH) {
             throw new UlidInvalidLengthException($value);
@@ -96,7 +118,10 @@ final class Ulid implements Stringable
      * @author Bas Milius <bas@mili.us>
      * @since 2.0.0
      */
-    public static function fromTimestamp(int $milliseconds, bool $lowercase = false): self
+    public static function fromTimestamp(
+        int $milliseconds,
+        bool $lowercase = false
+    ): self
     {
         if ($milliseconds < 0) {
             throw new InvalidArgumentException('ULID timestamps cannot be negative.');
@@ -196,5 +221,4 @@ final class Ulid implements Stringable
     {
         return ($value = $this->time . $this->randomness) && $this->lowercase ? strtolower($value) : strtoupper($value);
     }
-
 }

@@ -19,7 +19,7 @@ JWT signing and verification, TOTP authentication, identifiers and token utiliti
 Requires PHP 8.5 or later. Enable the `openssl` PHP extension. Composer checks the remaining package and extension dependencies declared in [composer.json](composer.json).
 
 ```sh
-composer require "raxos/security:^3.2"
+composer require "raxos/security:^3.3"
 ```
 
 ## Usage
@@ -65,3 +65,5 @@ See [Testing Raxos](https://github.com/basmilius/raxos/blob/main/TESTING.md) for
 ## License
 
 [MIT](LICENSE). Copyright (c) 2017 - present Bas Milius.
+
+See [instance jwt verification](https://raxos.dev/security/verification-policy) for the optional APIs and their lifetime or transport guarantees.
